@@ -770,9 +770,7 @@ main {
   .reveal { animation: none; opacity: 1; transform: none; }
 }
 </style>
-<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23252b30'/%3E%3Ctext x='50%25' y='58%25' font-family='JetBrains Mono,monospace' font-size='62' font-weight='700' text-anchor='middle' dominant-baseline='middle' fill='%2386c5a8'%3E%26gt;_%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -1130,10 +1128,7 @@ main {
     "showStats": true
   }/*EDITMODE-END*/;
 </script>
-<script type="text/babel" src="tweaks-panel.jsx"></script>
-<script type="text/babel">
-const { useEffect } = React;
-
+<script>
 function applyTweaks(t) {
   const root = document.documentElement.style;
   const h = t.accentHue;
@@ -1167,34 +1162,6 @@ function applyTweaks(t) {
   if (st) st.style.display = t.showStats ? '' : 'none';
 }
 
-function TweaksApp() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  useEffect(() => { applyTweaks(t); }, [t]);
-  return (
-    <TweaksPanel title="Tweaks">
-      <TweakSection label="Accent" />
-      <TweakSlider label="Hue" value={t.accentHue} min={0} max={360} step={1} unit="°"
-                   onChange={(v) => setTweak('accentHue', v)} />
-      <TweakSlider label="Saturation" value={t.accentChroma} min={0} max={30} step={1} unit="%"
-                   onChange={(v) => setTweak('accentChroma', v)} />
-      <TweakSection label="Greys" />
-      <TweakSlider label="Temperature" value={t.greyTemp} min={0} max={360} step={5} unit="°"
-                   onChange={(v) => setTweak('greyTemp', v)} />
-      <TweakRadio  label="Density" value={t.density}
-                   options={['compact','regular','comfy']}
-                   onChange={(v) => setTweak('density', v)} />
-      <TweakSection label="Sections" />
-      <TweakToggle label="Show stats grid"      value={t.showStats}   onChange={(v) => setTweak('showStats', v)} />
-      <TweakToggle label="Show recent commits"  value={t.showGitlog}  onChange={(v) => setTweak('showGitlog', v)} />
-      <TweakToggle label="Show status pill"     value={t.showStatus}  onChange={(v) => setTweak('showStatus', v)} />
-      <TweakText   label="Status line text"     value={t.statusText}  onChange={(v) => setTweak('statusText', v)} />
-    </TweaksPanel>
-  );
-}
-
-const _twkRoot = document.createElement('div');
-document.body.appendChild(_twkRoot);
-ReactDOM.createRoot(_twkRoot).render(<TweaksApp />);
 applyTweaks(TWEAK_DEFAULTS);
 </script>
 
