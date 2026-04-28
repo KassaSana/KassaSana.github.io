@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Kassahun Sanayew — MS Computer Engineering @ UF. Systems, latency, correctness.">
+<meta name="author" content="Kassahun Sanayew">
+<title>kassahun sanayew — ~/portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Cool desaturated greys — terminal, not GitHub */
+  --bg:          oklch(0.18 0.005 220);
+  --bg-2:        oklch(0.21 0.006 220);
+  --surface:     oklch(0.235 0.007 220);
+  --surface-2:   oklch(0.27 0.008 220);
+  --line:        oklch(0.32 0.008 220);
+  --line-soft:   oklch(0.28 0.007 220);
+
+  --fg:          oklch(0.92 0.005 220);
+  --fg-2:        oklch(0.78 0.006 220);
+  --fg-3:        oklch(0.62 0.008 220);
+  --fg-4:        oklch(0.48 0.009 220);
+
+  /* Single muted phosphor accent — desaturated, more CRT than neon */
+  --accent:      oklch(0.78 0.09 155);
+  --accent-2:    oklch(0.62 0.07 155);
+  --accent-dim:  oklch(0.48 0.05 155);
+
+  --max: 780px;
+  --pad: 44px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; background: var(--bg); }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13.5px;
+  line-height: 1.65;
+  font-weight: 400;
+  font-feature-settings: "calt", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Subtle scanline-free CRT vignette */
+  background-image:
+    radial-gradient(ellipse 90% 70% at 50% 0%, oklch(0.22 0.008 220) 0%, transparent 70%),
+    linear-gradient(180deg, var(--bg) 0%, oklch(0.165 0.005 220) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+::selection { background: var(--accent-dim); color: var(--fg); }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+a:hover { border-bottom-color: var(--accent-2); }
+
+/* ─── window chrome ───────────────────────────── */
+.chrome {
+  position: sticky; top: 0;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+  z-index: 10;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  background: color-mix(in oklab, var(--bg-2) 88%, transparent);
+}
+.chrome-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 10px var(--pad);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11.5px;
+  color: var(--fg-3);
+}
+.chrome-dots { display: flex; gap: 6px; }
+.chrome-dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--line);
+  border: 1px solid var(--line-soft);
+}
+.chrome-dot.active { background: var(--accent-dim); border-color: var(--accent-2); }
+.chrome-path { color: var(--fg-2); }
+.chrome-path .accent { color: var(--accent); }
+.chrome-meta { margin-left: auto; color: var(--fg-4); font-size: 11px; }
+
+/* ─── main container ──────────────────────────── */
+main {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 56px var(--pad) 96px;
+}
+
+/* ─── prompt line ─────────────────────────────── */
+.prompt-line {
+  font-size: 11.5px;
+  color: var(--fg-4);
+  margin-bottom: 6px;
+  letter-spacing: 0.2px;
+}
+.prompt-line .p { color: var(--accent-2); }
+.prompt-line .cmd { color: var(--fg-3); }
+
+/* ─── section heading ─────────────────────────── */
+.section { margin: 0 0 56px; }
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.section-head::before {
+  content: "";
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--accent-2);
+  transform: rotate(45deg);
+}
+.section-head h2 {
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 1.6px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+}
+.section-head .rule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--line) 0%, transparent 100%);
+}
+
+/* ─── hero ────────────────────────────────────── */
+.hero { margin: 8px 0 64px; }
+.hero h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  color: var(--fg);
+  margin-bottom: 8px;
+  line-height: 1.15;
+}
+.hero h1 .sigil { color: var(--accent); margin-right: 12px; font-weight: 500; }
+.hero .tag {
+  font-size: 13px;
+  color: var(--fg-2);
+  margin-bottom: 18px;
+  max-width: 56ch;
+}
+.hero .tag .em { color: var(--fg); }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--fg-2);
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg-2);
+}
+.status-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 18%, transparent);
+}
+
+.hero-links {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.hero-links a {
+  font-size: 12px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--fg-2);
+  background: var(--bg-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 120ms, color 120ms, background 120ms;
+}
+.hero-links a:hover {
+  color: var(--fg);
+  border-color: var(--accent-dim);
+  background: var(--surface);
+}
+.hero-links a .arr { color: var(--fg-4); transition: color 120ms; }
+.hero-links a:hover .arr { color: var(--accent); }
+
+/* ─── stats grid (quant flavor) ───────────────── */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 28px;
+}
+.stat {
+  background: var(--bg-2);
+  padding: 14px 16px;
+}
+.stat-k {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  color: var(--fg-4);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.stat-v {
+  font-size: 15px;
+  color: var(--fg);
+  font-weight: 500;
+}
+.stat-v .unit { color: var(--fg-3); font-size: 11px; font-weight: 400; margin-left: 3px; }
+.stat-v .accent { color: var(--accent); }
+
+/* ─── now ─────────────────────────────────────── */
+.now-row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 22px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--line-soft);
+  font-size: 13px;
+}
+.now-row:last-child { border-bottom: none; }
+.now-k { color: var(--accent-2); font-size: 11.5px; padding-top: 2px; }
+.now-v { color: var(--fg-2); }
+.now-v .em { color: var(--fg); font-weight: 500; }
+
+/* ─── about ───────────────────────────────────── */
+.about p {
+  color: var(--fg-2);
+  font-size: 13px;
+  margin-bottom: 14px;
+  line-height: 1.8;
+  max-width: 64ch;
+}
+.about p:last-child { margin-bottom: 0; }
+.about strong { color: var(--fg); font-weight: 500; }
+
+/* ─── experience ──────────────────────────────── */
+.exp {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 24px;
+  padding: 4px 0;
+}
+.exp-when {
+  font-size: 11.5px;
+  color: var(--fg-4);
+  padding-top: 3px;
+  line-height: 1.6;
+}
+.exp-co { color: var(--fg); font-size: 14px; font-weight: 500; }
+.exp-role { color: var(--fg-3); font-size: 12px; margin: 2px 0 14px; }
+.exp ul { list-style: none; }
+.exp ul li {
+  color: var(--fg-2);
+  font-size: 12.5px;
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 7px;
+  line-height: 1.7;
+}
+.exp ul li::before {
+  content: "›";
+  position: absolute; left: 2px;
+  color: var(--accent-2);
+}
+.exp ul li strong { color: var(--fg); font-weight: 500; }
+
+/* ─── projects ────────────────────────────────── */
+.proj {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-2);
+  padding: 22px 24px;
+  margin-bottom: 14px;
+  transition: border-color 160ms, background 160ms;
+  display: flex;
+  flex-direction: column;
+}
+.proj:hover { border-color: var(--accent-dim); background: var(--surface); }
+.proj-active {
+  border-color: var(--accent-dim);
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--accent) 5%, var(--bg-2)) 0%,
+    var(--bg-2) 100%);
+}
+.proj-status {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 9.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  background: color-mix(in oklab, var(--accent) 8%, transparent);
+}
+.proj-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.proj-grid .proj { margin-bottom: 0; padding: 20px 22px; }
+.proj-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.proj-name {
+  color: var(--accent);
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+}
+.proj-when { color: var(--fg-4); font-size: 11px; }
+.proj-perf {
+  font-size: 11px;
+  color: var(--fg-3);
+  margin-bottom: 12px;
+  padding: 4px 0 8px;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.proj-perf .k { color: var(--fg-4); }
+.proj-perf .v { color: var(--fg-2); }
+.proj-perf .accent { color: var(--accent); }
+.proj-tag {
+  color: var(--fg);
+  font-size: 13px;
+  margin-bottom: 12px;
+  line-height: 1.65;
+}
+.proj-body {
+  color: var(--fg-2);
+  font-size: 12.5px;
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+.proj-body strong { color: var(--fg); font-weight: 500; }
+.proj-stack {
+  font-size: 11px;
+  color: var(--fg-4);
+  margin-bottom: 12px;
+}
+.proj-links { display: flex; gap: 16px; font-size: 12px; }
+.proj-links a { color: var(--fg-2); }
+.proj-links a:hover { color: var(--accent); }
+.proj-links .arr { color: var(--fg-4); margin-left: 4px; }
+
+/* ─── trilogy timeline ────────────────────────── */
+.trilogy {
+  border-left: 1px solid var(--line);
+  margin: 14px 0 14px 4px;
+  padding-left: 22px;
+}
+.iter { position: relative; margin-bottom: 18px; }
+.iter:last-child { margin-bottom: 4px; }
+.iter::before {
+  content: "";
+  position: absolute;
+  left: -27px; top: 7px;
+  width: 7px; height: 7px;
+  background: var(--bg-2);
+  border: 1.5px solid var(--accent-2);
+  border-radius: 50%;
+}
+.iter-head {
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 12.5px;
+  color: var(--fg);
+  font-weight: 500;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.iter-head .ver { color: var(--fg-4); font-weight: 400; font-size: 10.5px; }
+.iter-head .arr { color: var(--accent); }
+.iter-desc {
+  color: var(--fg-2);
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 4px;
+}
+.iter-desc strong { color: var(--fg); font-weight: 500; }
+.iter-stack { font-size: 10.5px; color: var(--fg-4); }
+
+/* ─── github contribution heatmap ─────────────── */
+.gh {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 18px 20px 16px;
+}
+.gh-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.gh-title { color: var(--fg); font-size: 13px; font-weight: 500; }
+.gh-title .num { color: var(--accent); }
+.gh-link { color: var(--fg-3); font-size: 11px; }
+.gh-link:hover { color: var(--accent); }
+.gh-grid-wrap { overflow-x: auto; padding-bottom: 4px; }
+.gh-months {
+  display: flex;
+  font-size: 9.5px;
+  color: var(--fg-4);
+  margin-bottom: 6px;
+  padding-left: 24px;
+  letter-spacing: 0.4px;
+  gap: 0;
+}
+.gh-months span { flex: 1; }
+.gh-body { display: flex; gap: 6px; }
+.gh-days {
+  display: grid;
+  grid-template-rows: repeat(7, 11px);
+  gap: 3px;
+  font-size: 9px;
+  color: var(--fg-4);
+  width: 18px;
+}
+.gh-days span:nth-child(even) { visibility: hidden; }
+.gh-grid {
+  display: grid;
+  grid-template-columns: repeat(53, 11px);
+  grid-template-rows: repeat(7, 11px);
+  gap: 3px;
+  grid-auto-flow: column;
+}
+.gh-cell {
+  width: 11px; height: 11px;
+  border-radius: 2px;
+  background: oklch(0.24 0.005 220);
+  border: 1px solid color-mix(in oklab, var(--line) 40%, transparent);
+}
+.gh-cell[data-l="1"] { background: color-mix(in oklab, var(--accent) 22%, var(--bg-2)); }
+.gh-cell[data-l="2"] { background: color-mix(in oklab, var(--accent) 45%, var(--bg-2)); }
+.gh-cell[data-l="3"] { background: color-mix(in oklab, var(--accent) 68%, var(--bg-2)); }
+.gh-cell[data-l="4"] { background: var(--accent); }
+.gh-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 10.5px;
+  color: var(--fg-4);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.gh-legend { display: flex; align-items: center; gap: 4px; }
+.gh-legend .gh-cell { width: 10px; height: 10px; }
+.gh-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  margin-top: 14px;
+  background: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.gh-stat { background: var(--bg-2); padding: 10px 14px; }
+.gh-stat-k { font-size: 9.5px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--fg-4); margin-bottom: 3px; }
+.gh-stat-v { color: var(--fg); font-size: 13px; font-weight: 500; }
+.gh-stat-v .accent { color: var(--accent); }
+.gh-overview {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line-soft);
+  font-size: 11.5px;
+  color: var(--fg-3);
+  line-height: 1.7;
+}
+.gh-overview strong { color: var(--fg); font-weight: 500; }
+.gh-overview a { color: var(--accent); }
+
+/* ─── git log (legacy) ────────────────────────── */
+.gitlog {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px 20px;
+  font-size: 12px;
+  line-height: 1.85;
+}
+.gitlog-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--fg-4);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.gitlog-row {
+  display: grid;
+  grid-template-columns: 60px 80px 1fr;
+  gap: 14px;
+  font-size: 12px;
+  align-items: baseline;
+}
+.gitlog-row:hover .commit-msg { color: var(--fg); }
+.commit-hash { color: var(--accent); font-size: 11px; }
+.commit-when { color: var(--fg-4); font-size: 11px; }
+.commit-msg { color: var(--fg-2); transition: color 120ms; }
+.commit-msg .repo { color: var(--fg-3); }
+
+/* ─── workshop list ───────────────────────────── */
+.intro {
+  font-size: 12px;
+  color: var(--fg-3);
+  margin-bottom: 18px;
+  line-height: 1.7;
+  max-width: 60ch;
+}
+.shop {
+  display: grid;
+  grid-template-columns: 170px 1fr 60px;
+  gap: 18px;
+  padding: 11px 0;
+  border-bottom: 1px dashed var(--line-soft);
+  font-size: 12.5px;
+  align-items: baseline;
+}
+.shop:last-child { border-bottom: none; }
+.shop-name { color: var(--accent); }
+.shop-desc { color: var(--fg-2); font-size: 12px; line-height: 1.55; }
+.shop-lang { color: var(--fg-4); font-size: 11px; text-align: right; }
+
+/* ─── project-based learning ──────────────── */
+.learn-card {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-2);
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  transition: border-color 160ms, background 160ms;
+  display: flex;
+  flex-direction: column;
+}
+.learn-card:hover { border-color: var(--accent-dim); background: var(--surface); }
+.learn-active {
+  border-color: var(--accent-dim);
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--accent) 5%, var(--bg-2)) 0%,
+    var(--bg-2) 100%);
+}
+.learn-status {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 9.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent-dim);
+  padding: 2px 8px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+  background: color-mix(in oklab, var(--accent) 8%, transparent);
+}
+.learn-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.learn-name {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+}
+.learn-when { color: var(--fg-4); font-size: 11px; }
+.learn-tag {
+  color: var(--fg);
+  font-size: 12.5px;
+  line-height: 1.65;
+  margin-bottom: 10px;
+}
+.learn-aim {
+  font-size: 11.5px;
+  color: var(--fg-3);
+  line-height: 1.65;
+  margin-bottom: 10px;
+  padding: 8px 0;
+  border-top: 1px dashed var(--line-soft);
+  border-bottom: 1px dashed var(--line-soft);
+}
+.learn-aim .k { color: var(--accent-2); margin-right: 4px; }
+.learn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.learn-grid .learn-card { margin-bottom: 0; }
+
+/* ─── contact ─────────────────────────────── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.contact-card {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg-2);
+  color: var(--fg-2);
+  transition: border-color 160ms, background 160ms, transform 160ms;
+}
+.contact-card:hover {
+  border-color: var(--accent-dim);
+  background: var(--surface);
+  transform: translateY(-1px);
+}
+.contact-card.primary {
+  grid-column: span 2;
+  border-color: var(--accent-dim);
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--accent) 6%, var(--bg-2)) 0%,
+    var(--bg-2) 100%);
+}
+.contact-k {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--fg-4);
+}
+.contact-card.primary .contact-k { color: var(--accent-2); }
+.contact-v {
+  color: var(--fg);
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.contact-card.primary .contact-v { font-size: 15px; }
+.contact-arr {
+  color: var(--fg-4);
+  font-size: 16px;
+  transition: color 160ms, transform 160ms;
+}
+.contact-card:hover .contact-arr { color: var(--accent); transform: translateX(2px); }
+
+/* ─── blog ────────────────────────────────────── */
+.post {
+  display: grid;
+  grid-template-columns: 90px 1fr 60px;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--line-soft);
+  font-size: 12.5px;
+  align-items: baseline;
+  transition: background 120ms;
+}
+.post:last-child { border-bottom: none; }
+.post-when { color: var(--fg-4); font-size: 11px; }
+.post-title a { color: var(--fg); font-size: 13px; font-weight: 500; border-bottom: none; }
+.post-title a:hover { color: var(--accent); }
+.post-desc { color: var(--fg-3); font-size: 11.5px; margin-top: 3px; line-height: 1.55; }
+.post-meta { color: var(--fg-4); font-size: 10.5px; text-align: right; }
+.post-soon {
+  display: inline-block;
+  font-size: 9.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  border: 1px solid var(--accent-dim);
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+  vertical-align: 2px;
+}
+
+/* ─── stack ───────────────────────────────────── */
+.skl {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 22px;
+  padding: 11px 0;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.skl:last-child { border-bottom: none; }
+.skl-k { color: var(--fg-4); font-size: 11.5px; padding-top: 2px; }
+.skl-v { color: var(--fg-2); font-size: 12.5px; line-height: 1.7; }
+
+/* ─── footer ──────────────────────────────────── */
+.foot {
+  margin-top: 72px;
+  padding-top: 22px;
+  border-top: 1px dashed var(--line-soft);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 10.5px;
+  color: var(--fg-4);
+  letter-spacing: 0.2px;
+}
+.foot .hash { color: var(--accent-2); }
+
+/* ─── responsive ──────────────────────────────── */
+@media (max-width: 640px) {
+  :root { --pad: 22px; }
+  main { padding: 40px var(--pad) 64px; }
+  .hero h1 { font-size: 22px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .now-row, .exp, .skl {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .shop { grid-template-columns: 1fr; gap: 4px; }
+  .shop-lang { text-align: left; }
+  .post { grid-template-columns: 1fr; gap: 4px; }
+  .post-meta { text-align: left; }
+  .learn-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-card.primary { grid-column: span 1; }
+  .contact-card { grid-template-columns: 80px 1fr auto; padding: 14px 16px; }
+  .gitlog-row { grid-template-columns: 60px 1fr; }
+  .gitlog-row .commit-when { display: none; }
+  .chrome-meta { display: none; }
+}
+
+/* ─── reveal-on-load ──────────────────────────── */
+.reveal { opacity: 0; transform: translateY(6px); animation: reveal 480ms ease forwards; }
+.reveal:nth-child(1) { animation-delay: 40ms; }
+.reveal:nth-child(2) { animation-delay: 100ms; }
+.reveal:nth-child(3) { animation-delay: 160ms; }
+.reveal:nth-child(4) { animation-delay: 220ms; }
+.reveal:nth-child(5) { animation-delay: 280ms; }
+.reveal:nth-child(6) { animation-delay: 340ms; }
+@keyframes reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; opacity: 1; transform: none; }
+}
+</style>
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- ─── window chrome ─────────────────────────── -->
+<div class="chrome">
+  <div class="chrome-inner">
+    <div class="chrome-dots">
+      <span class="chrome-dot active"></span>
+      <span class="chrome-dot"></span>
+      <span class="chrome-dot"></span>
+    </div>
+    <span class="chrome-path"><span class="accent">~</span>/portfolio<span style="color:var(--fg-4)"> — zsh — 92×40</span></span>
+    <span class="chrome-meta">last build: apr 27, 2026 · gainesville, fl</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- ─── HERO ────────────────────────────────── -->
+  <section class="hero reveal" data-screen-label="01 hero">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">whoami</span></div>
+    <h1><span class="sigil">›</span>Kassahun Sanayew</h1>
+    <p class="tag">b.s. computer science, <span class="em">university of florida</span> (aug 2025) · m.s. computer engineering, uf (may 2027) · prev swe intern <span class="em">@amazon</span> · interested in low-latency systems, statistical learning, quant, and full-stack.</p>
+
+    <div class="status"><span class="status-dot"></span>incoming swe intern @cvs · summer 2026</div>
+
+    <nav class="hero-links">
+      <a href="https://github.com/KassaSana">github <span class="arr">↗</span></a>
+      <a href="https://linkedin.com/in/kassahun-sanayew">linkedin <span class="arr">↗</span></a>
+      <a href="mailto:k.sanayew@ufl.edu">k.sanayew@ufl.edu <span class="arr">↗</span></a>
+      <a href="resume.pdf">resume.pdf <span class="arr">↓</span></a>
+    </nav>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-k">location</div>
+        <div class="stat-v">gainesville, fl</div>
+      </div>
+      <div class="stat">
+        <div class="stat-k">graduating</div>
+        <div class="stat-v">may <span class="accent">2027</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-k">primary</div>
+        <div class="stat-v">c++ · python · java</div>
+      </div>
+      <div class="stat">
+        <div class="stat-k">focus</div>
+        <div class="stat-v">low-latency systems · statistical learning</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NOW ─────────────────────────────────── -->
+  <section class="section reveal" data-screen-label="02 now">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">cat now.md</span></div>
+    <div class="section-head"><h2>now</h2><span class="rule"></span></div>
+    <div class="now-row">
+      <span class="now-k">building</span>
+      <span class="now-v"><span class="em">silo</span> — os-level focus enforcement in go. workspace-first model: declare what you're allowed to use, everything else fails closed.<br><span class="em">neurofocus</span> — low-latency telemetry pipeline; rewriting the capture path in c++17 to push p99 under 100ms at 10k events/sec.</span>
+    </div>
+    <div class="now-row">
+      <span class="now-k">studying</span>
+      <span class="now-v">distributed systems · low-latency systems · statistical learning</span>
+    </div>
+    <div class="now-row">
+      <span class="now-k">reading</span>
+      <span class="now-v">papers on lock-free data structures &amp; the lmax disruptor pattern · <em>what every programmer should know about memory</em> (drepper) · <em>designing data-intensive applications</em> (kleppmann) · <em>computer systems: a programmer's perspective</em> (csapp)</span>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ───────────────────────────────── -->
+  <section class="section about reveal" data-screen-label="03 about">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">cat about.txt</span></div>
+    <div class="section-head"><h2>about</h2><span class="rule"></span></div>
+    <p>masters student in <strong>computer engineering at the university of florida</strong>, graduating may 2027. finished my cs undergrad at uf in august 2025, and spent the prior summer as an <strong>swe intern at amazon</strong> on the promotions platform.</p>
+    <p>most of my work sits at the seam between <strong>systems and applications</strong> — lock-free queues, message buses, the kind of code where the interesting question is latency, correctness, or how the system behaves when something goes wrong.</p>
+    <p>right now i'm focused on tools people use daily — well-written c++ for the low-level path, statistical learning to validate what's actually working (numbers don't lie), and the product instinct to ship something whole rather than a tech demo.</p>
+  </section>
+
+  <!-- ─── EXPERIENCE ──────────────────────────── -->
+  <section class="section reveal" data-screen-label="04 experience">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">git log --author=kassa --since=2024</span></div>
+    <div class="section-head"><h2>experience</h2><span class="rule"></span></div>
+    <div class="exp">
+      <div class="exp-when">incoming<br>summer 2026</div>
+      <div>
+        <div class="exp-co">cvs health <span style="color:var(--accent-2);font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:500;margin-left:8px;border:1px solid var(--accent-dim);padding:1px 7px;border-radius:3px;">incoming</span></div>
+        <div class="exp-role">swe intern · summer 2026</div>
+        <ul>
+          <li>joining the cvs engineering team this summer — details to come.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp" style="margin-top:18px;">
+      <div class="exp-when">may–aug<br>2024</div>
+      <div>
+        <div class="exp-co">amazon</div>
+        <div class="exp-role">swe intern · promotions platform · seattle, wa</div>
+        <ul>
+          <li>designed an <strong>event value creation api</strong> in java/spring boot that automated promotion value calculations across the platform — reduced time-to-result from <strong>10–20 minutes to under 5 seconds</strong>.</li>
+          <li>engineered a graph-traversal algorithm parsing nested promotional rule trees from dynamodb, evaluating multi-level eligibility constraints across variable-depth dependency chains.</li>
+          <li>integrated with aws appconfig for dynamic rule updates without service restarts — real-time configuration changes across distributed promotion infra.</li>
+          <li>prototyped a test-case generation api that auto-produces regression suites from production promotion configs, eliminating hand-written qa scaffolding.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ACTIVITY (github contribution heatmap) ─── -->
+  <section class="section reveal" data-screen-label="05 activity">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">curl github.com/KassaSana/contributions</span></div>
+    <div class="section-head"><h2>github activity</h2><span class="rule"></span></div>
+    <div class="gh">
+      <div class="gh-head">
+        <span class="gh-title"><span class="num" id="gh-total">—</span> contributions in the last year</span>
+        <a class="gh-link" href="https://github.com/KassaSana">github.com/KassaSana ↗</a>
+      </div>
+      <div class="gh-grid-wrap">
+        <div class="gh-months" id="gh-months"></div>
+        <div class="gh-body">
+          <div class="gh-days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+          <div class="gh-grid" id="gh-grid"></div>
+        </div>
+      </div>
+      <div class="gh-foot">
+        <span>longest streak: <strong style="color:var(--fg-2)" id="gh-streak">—</strong></span>
+        <div class="gh-legend">
+          <span>less</span>
+          <span class="gh-cell" data-l="0"></span>
+          <span class="gh-cell" data-l="1"></span>
+          <span class="gh-cell" data-l="2"></span>
+          <span class="gh-cell" data-l="3"></span>
+          <span class="gh-cell" data-l="4"></span>
+          <span>more</span>
+        </div>
+      </div>
+      <div class="gh-stats">
+        <div class="gh-stat">
+          <div class="gh-stat-k">repos</div>
+          <div class="gh-stat-v">22 <span class="accent">public</span></div>
+        </div>
+        <div class="gh-stat">
+          <div class="gh-stat-k">primary langs</div>
+          <div class="gh-stat-v">c++ · python</div>
+        </div>
+        <div class="gh-stat">
+          <div class="gh-stat-k">last push</div>
+          <div class="gh-stat-v">2h ago</div>
+        </div>
+      </div>
+      <div class="gh-overview">
+        <strong>activity overview —</strong> contributing to <a href="https://github.com/KassaSana/silo">silo</a>, <a href="https://github.com/KassaSana/FocoFlow">neurofocus</a>, <a href="https://github.com/KassaSana/CivicQ">civicq</a> and 4 other repositories. mostly c++ and python this year.
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PROJECTS ────────────────────────────── -->
+  <section class="section reveal" data-screen-label="06 projects">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">ls -la projects/</span></div>
+    <div class="section-head"><h2>projects</h2><span class="rule"></span></div>
+    <p class="intro">sustained efforts — built to solve a problem, not just to learn the stack.</p>
+
+    <article class="proj proj-active">
+      <div class="proj-status">currently building</div>
+      <div class="proj-head">
+        <div class="proj-name">silo</div>
+        <div class="proj-when">in progress</div>
+      </div>
+      <div class="proj-perf"><span class="k">signature:</span> <span class="v">workspace-first focus enforcement · </span><span class="accent">fail-closed at os level</span></div>
+      <p class="proj-tag">stripped back to the essential primitive: declare what you're allowed to use, everything else fails closed.</p>
+      <p class="proj-body">third iteration of a focus-tooling problem i've been chasing — single-binary go deploy, sqlite for persistence, hardened with input validation and fail-closed network rules. enforcement happens below the apps fighting you, not inside them.</p>
+      <div class="proj-stack">go · sqlite · os hooks</div>
+      <div class="proj-links">
+        <a href="https://github.com/KassaSana/silo">github<span class="arr">↗</span></a>
+      </div>
+    </article>
+
+    <div class="proj-grid">
+      <article class="proj">
+        <div class="proj-head">
+          <div class="proj-name">neurofocus</div>
+          <div class="proj-when">2025–26</div>
+        </div>
+        <div class="proj-perf"><span class="k">signature:</span> <span class="v">lock-free spsc ring buffer · </span><span class="accent">p99 &lt;100ms @ 10k ev/s</span></div>
+        <p class="proj-tag">low-latency event pipeline for productivity telemetry — the capture path rewritten in c++ to actually understand what was slow.</p>
+        <p class="proj-body">c++17 capture with a <strong>lock-free spsc ring buffer</strong> — atomic head/tail counters, acquire/release memory ordering, 64-byte cache-line alignment to prevent false sharing. 4-layer pipeline: c++ → zeromq pub/sub → python lstm inference → spring boot websocket → react ui.</p>
+        <div class="proj-stack">c++17 · zeromq · python · spring boot · react/ts</div>
+        <div class="proj-links">
+          <a href="https://github.com/KassaSana/FocoFlow">github<span class="arr">↗</span></a>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-head">
+          <div class="proj-name">civicq</div>
+          <div class="proj-when">2026</div>
+        </div>
+        <div class="proj-perf"><span class="k">signature:</span> <span class="v">discrete-event sim · </span><span class="accent">multi-server m/g/k</span></div>
+        <p class="proj-tag">decision-support engine that optimizes queue resources under stochastic demand.</p>
+        <p class="proj-body">discrete-event simulation of multi-server queueing systems. takes a system definition (servers, arrival distributions, service times), evaluates how different resource-allocation policies hold up under load shocks, and finds the staffing level that minimizes expected wait within a cost envelope.</p>
+        <div class="proj-stack">c++ · python · discrete-event sim</div>
+        <div class="proj-links">
+          <a href="https://github.com/KassaSana/CivicQ">github<span class="arr">↗</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─── BLOG ────────────────────────────────── -->
+  <section class="section reveal" data-screen-label="07 blog">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">ls -la blog/</span></div>
+    <div class="section-head"><h2>writing</h2><span class="rule"></span></div>
+    <p class="intro">notes from things i'm building or learning. mostly for me — but if it's useful to you, even better.</p>
+    <div class="post">
+      <span class="post-when">in progress</span>
+      <span>
+        <span class="post-title"><a href="#">why i rebuilt the same focus app three times<span class="post-soon">draft</span></a></span>
+        <div class="post-desc">on noticing that ui was never the bottleneck — and what moving the enforcement layer one level deeper each time actually taught me.</div>
+      </span>
+      <span class="post-meta">~8 min</span>
+    </div>
+    <div class="post">
+      <span class="post-when">in progress</span>
+      <span>
+        <span class="post-title"><a href="#">a lock-free spsc ring buffer, annotated<span class="post-soon">draft</span></a></span>
+        <div class="post-desc">walking through the c++ memory model — acquire/release semantics, why cache-line padding matters, and how false sharing destroyed my first benchmark.</div>
+      </span>
+      <span class="post-meta">~12 min</span>
+    </div>
+    <div class="post">
+      <span class="post-when">planned</span>
+      <span>
+        <span class="post-title"><a href="#">rag is mostly retrieval — the model is the easy part</a></span>
+        <div class="post-desc">what i learned tuning chunk size, overlap, and top-k on notemind, and why grounded prompts beat clever prompts.</div>
+      </span>
+      <span class="post-meta">~6 min</span>
+    </div>
+    <div class="post">
+      <span class="post-when">planned</span>
+      <span>
+        <span class="post-title"><a href="#">amazon promotions: graph traversal in production</a></span>
+        <div class="post-desc">notes on the rule-tree problem, why a flat evaluator wasn't enough, and how dependency depth shaped the api.</div>
+      </span>
+      <span class="post-meta">~7 min</span>
+    </div>
+  </section>
+
+  <!-- ─── PROJECT-BASED LEARNING ──────────────── -->
+  <section class="section reveal" data-screen-label="08 learning">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">ls -la learning/</span></div>
+    <div class="section-head"><h2>project-based learning</h2><span class="rule"></span></div>
+    <p class="intro">building things from scratch to understand the layer below the framework — a kv store to feel write-amplification, a web server in c to stop hand-waving about sockets, data structures by hand to internalize their tradeoffs.</p>
+
+    <article class="learn-card learn-active">
+      <div class="learn-status">currently building</div>
+      <div class="learn-head">
+        <div class="learn-name">redis-from-scratch</div>
+        <div class="learn-when">in progress</div>
+      </div>
+      <p class="learn-tag">building a redis-compatible kv store in c++ to actually understand event loops, the resp wire protocol, and how an in-memory db handles persistence without losing the latency.</p>
+      <div class="learn-aim"><span class="k">learning →</span> single-threaded event loops · resp protocol parsing · aof &amp; rdb persistence · expiry &amp; eviction policies</div>
+      <div class="proj-stack">c++ · epoll · sockets</div>
+      <div class="proj-links">
+        <a href="https://github.com/KassaSana">github<span class="arr">↗</span></a>
+      </div>
+    </article>
+
+    <div class="learn-grid">
+      <article class="learn-card">
+        <div class="learn-head">
+          <div class="learn-name">httpd-c</div>
+          <div class="learn-when">2025</div>
+        </div>
+        <p class="learn-tag">a tiny http/1.1 server in c — sockets, request parsing, a thread pool.</p>
+        <div class="learn-aim"><span class="k">learning →</span> bsd sockets · http parsing · concurrency primitives</div>
+        <div class="proj-stack">c · pthreads</div>
+        <div class="proj-links">
+          <a href="https://github.com/KassaSana">github<span class="arr">↗</span></a>
+        </div>
+      </article>
+
+      <article class="learn-card">
+        <div class="learn-head">
+          <div class="learn-name">blackjack-sim</div>
+          <div class="learn-when">2025</div>
+        </div>
+        <p class="learn-tag">card-counting sim comparing hi-lo, ko, omega ii over millions of hands.</p>
+        <div class="learn-aim"><span class="k">learning →</span> monte carlo · statistical convergence · ev under variance</div>
+        <div class="proj-stack">c++ · monte carlo</div>
+        <div class="proj-links">
+          <a href="https://github.com/KassaSana/Blackjack-Assistance-Simulator">github<span class="arr">↗</span></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ─────────────────────────────── -->
+  <section class="section reveal" data-screen-label="09 contact">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">cat contact.txt</span></div>
+    <div class="section-head"><h2>get in touch</h2><span class="rule"></span></div>
+    <p class="intro">reach out about internships, full-time roles, or anything you found interesting on this page. the fastest way is email.</p>
+    <div class="contact-grid">
+      <a class="contact-card primary" href="mailto:k.sanayew@ufl.edu">
+        <div class="contact-k">email</div>
+        <div class="contact-v">k.sanayew@ufl.edu</div>
+        <div class="contact-arr">→</div>
+      </a>
+      <a class="contact-card" href="https://linkedin.com/in/kassahun-sanayew">
+        <div class="contact-k">linkedin</div>
+        <div class="contact-v">/in/kassahun-sanayew</div>
+        <div class="contact-arr">↗</div>
+      </a>
+      <a class="contact-card" href="https://github.com/KassaSana">
+        <div class="contact-k">github</div>
+        <div class="contact-v">@KassaSana</div>
+        <div class="contact-arr">↗</div>
+      </a>
+      <a class="contact-card" href="resume.pdf">
+        <div class="contact-k">resume</div>
+        <div class="contact-v">resume.pdf</div>
+        <div class="contact-arr">↓</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ─── STACK ───────────────────────────────── -->
+  <section class="section reveal" data-screen-label="10 stack">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">cat stack.toml</span></div>
+    <div class="section-head"><h2>stack</h2><span class="rule"></span></div>
+    <div class="skl"><span class="skl-k">languages</span><span class="skl-v">c++17 · java · python · typescript · go · sql</span></div>
+    <div class="skl"><span class="skl-k">frameworks</span><span class="skl-v">spring boot · react · zeromq · flask · fastapi · node/express</span></div>
+    <div class="skl"><span class="skl-k">infra</span><span class="skl-v">aws (dynamodb, ec2, appconfig) · docker · terraform · linux · git</span></div>
+    <div class="skl"><span class="skl-k">data &amp; ml</span><span class="skl-v">postgres · pgvector · huggingface · numpy · openai api</span></div>
+    <div class="skl"><span class="skl-k">testing</span><span class="skl-v">junit · mockito · pytest · jest · postman</span></div>
+  </section>
+
+  <footer class="foot">
+    <span>build <span class="hash">#a3f9c2e</span> · last sync apr 27, 2026 · hand-rolled, served from github pages</span>
+    <span>© kassahun sanayew</span>
+  </footer>
+
+</main>
+
+<!-- ─── Tweaks ─────────────────────────────────── -->
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accentHue": 155,
+    "accentChroma": 9,
+    "greyTemp": 220,
+    "density": "regular",
+    "showStatus": true,
+    "statusText": "open to internships & new grad — swe \/ quant \/ data science",
+    "showGitlog": true,
+    "showStats": true
+  }/*EDITMODE-END*/;
+</script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const { useEffect } = React;
+
+function applyTweaks(t) {
+  const root = document.documentElement.style;
+  const h = t.accentHue;
+  const c = (t.accentChroma / 100).toFixed(3);
+  root.setProperty('--accent',     `oklch(0.78 ${c} ${h})`);
+  root.setProperty('--accent-2',   `oklch(0.62 ${(c*0.78).toFixed(3)} ${h})`);
+  root.setProperty('--accent-dim', `oklch(0.48 ${(c*0.55).toFixed(3)} ${h})`);
+
+  const g = t.greyTemp;
+  root.setProperty('--bg',        `oklch(0.18 0.005 ${g})`);
+  root.setProperty('--bg-2',      `oklch(0.21 0.006 ${g})`);
+  root.setProperty('--surface',   `oklch(0.235 0.007 ${g})`);
+  root.setProperty('--surface-2', `oklch(0.27 0.008 ${g})`);
+  root.setProperty('--line',      `oklch(0.32 0.008 ${g})`);
+  root.setProperty('--line-soft', `oklch(0.28 0.007 ${g})`);
+
+  const sizes = { compact: 12.5, regular: 13.5, comfy: 14.5 };
+  document.body.style.fontSize = (sizes[t.density] || 13.5) + 'px';
+
+  const status = document.querySelector('.status');
+  if (status) {
+    status.style.display = t.showStatus ? '' : 'none';
+    const dot = status.querySelector('.status-dot');
+    status.textContent = '';
+    if (dot) status.appendChild(dot);
+    status.appendChild(document.createTextNode(t.statusText));
+  }
+  const gl = document.querySelector('[data-screen-label="05 activity"]');
+  if (gl) gl.style.display = t.showGitlog ? '' : 'none';
+  const st = document.querySelector('.stats');
+  if (st) st.style.display = t.showStats ? '' : 'none';
+}
+
+function TweaksApp() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  useEffect(() => { applyTweaks(t); }, [t]);
+  return (
+    <TweaksPanel title="Tweaks">
+      <TweakSection label="Accent" />
+      <TweakSlider label="Hue" value={t.accentHue} min={0} max={360} step={1} unit="°"
+                   onChange={(v) => setTweak('accentHue', v)} />
+      <TweakSlider label="Saturation" value={t.accentChroma} min={0} max={30} step={1} unit="%"
+                   onChange={(v) => setTweak('accentChroma', v)} />
+      <TweakSection label="Greys" />
+      <TweakSlider label="Temperature" value={t.greyTemp} min={0} max={360} step={5} unit="°"
+                   onChange={(v) => setTweak('greyTemp', v)} />
+      <TweakRadio  label="Density" value={t.density}
+                   options={['compact','regular','comfy']}
+                   onChange={(v) => setTweak('density', v)} />
+      <TweakSection label="Sections" />
+      <TweakToggle label="Show stats grid"      value={t.showStats}   onChange={(v) => setTweak('showStats', v)} />
+      <TweakToggle label="Show recent commits"  value={t.showGitlog}  onChange={(v) => setTweak('showGitlog', v)} />
+      <TweakToggle label="Show status pill"     value={t.showStatus}  onChange={(v) => setTweak('showStatus', v)} />
+      <TweakText   label="Status line text"     value={t.statusText}  onChange={(v) => setTweak('statusText', v)} />
+    </TweaksPanel>
+  );
+}
+
+const _twkRoot = document.createElement('div');
+document.body.appendChild(_twkRoot);
+ReactDOM.createRoot(_twkRoot).render(<TweaksApp />);
+applyTweaks(TWEAK_DEFAULTS);
+</script>
+
+<script>
+// ─── github-style contribution heatmap (real data via jogruber API, synthetic fallback)
+(function(){
+  const grid = document.getElementById('gh-grid');
+  const months = document.getElementById('gh-months');
+  const totalEl = document.getElementById('gh-total');
+  const streakEl = document.getElementById('gh-streak');
+  if (!grid) return;
+
+  const USER = 'KassaSana';
+  const WEEKS = 53, DAYS = 7;
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  // Render a 53x7 column-major grid from an array of {date, level} entries.
+  // Aligned so the rightmost column is the current week; leading blanks padded as level 0.
+  function renderFromContributions(contribs) {
+    // contribs: chronological array, oldest → newest, daily.
+    // Build a date→level map.
+    const byDate = new Map();
+    for (const c of contribs) byDate.set(c.date, { count: c.count ?? 0, level: c.level ?? 0 });
+
+    // Anchor: the Monday of the current week. Then start = anchor - 52 weeks.
+    // This produces exactly 53 columns × 7 rows (Mon..Sun) ending on this Sunday.
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayDow = today.getDay(); // 0=Sun..6=Sat
+    const daysSinceMon = (todayDow === 0) ? 6 : (todayDow - 1);
+    const start = new Date(today);
+    start.setDate(start.getDate() - daysSinceMon - 52 * 7);
+
+    // Walk day-by-day. Column = week index, Row = day-of-week (Mon..Sun = 0..6).
+    const cells = new Array(WEEKS * DAYS).fill(0);
+    const counts = new Array(WEEKS * DAYS).fill(0);
+    let total = 0, streak = 0, bestStreak = 0;
+    const monthLabelWeeks = []; // [{week, label}] — first occurrence of each month
+
+    const today2 = new Date(); today2.setHours(0,0,0,0);
+    const cur = new Date(start);
+    let lastMonth = -1;
+    for (let w = 0; w < WEEKS; w++) {
+      for (let d = 0; d < DAYS; d++) {
+        const iso = cur.toISOString().slice(0, 10);
+        const entry = byDate.get(iso);
+        const level = entry ? Math.max(0, Math.min(4, entry.level | 0)) : 0;
+        const count = entry ? (entry.count | 0) : 0;
+        const idx = w * DAYS + d;
+        cells[idx] = level;
+        counts[idx] = count;
+        // Stats — only count days up to today (don't count future days in the current week).
+        if (cur <= today2) {
+          total += count;
+          if (count > 0) {
+            streak++;
+            if (streak > bestStreak) bestStreak = streak;
+          } else {
+            streak = 0;
+          }
+        }
+        // Month label: first week where the 1st-row day's month differs
+        if (d === 0) {
+          const m = cur.getMonth();
+          if (m !== lastMonth) {
+            monthLabelWeeks.push({ week: w, label: monthNames[m] });
+            lastMonth = m;
+          }
+        }
+        cur.setDate(cur.getDate() + 1);
+      }
+    }
+
+    // Render cells
+    grid.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    const tDate = new Date(start);
+    for (let i = 0; i < cells.length; i++) {
+      const c = document.createElement('span');
+      c.className = 'gh-cell';
+      c.dataset.l = String(cells[i]);
+      const iso = tDate.toISOString().slice(0, 10);
+      const n = counts[i];
+      c.title = `${n} contribution${n === 1 ? '' : 's'} on ${iso}`;
+      frag.appendChild(c);
+      tDate.setDate(tDate.getDate() + 1);
+    }
+    grid.appendChild(frag);
+
+    // Months row — emit one span per week (53 spans), labeled at the first week of each month.
+    // The existing `.gh-months span { flex: 1 }` rule aligns each span with its column.
+    const labelByWeek = new Array(WEEKS).fill('');
+    for (const ml of monthLabelWeeks) labelByWeek[ml.week] = ml.label;
+    months.innerHTML = labelByWeek.map(l => `<span>${l}</span>`).join('');
+
+    return { total, bestStreak };
+  }
+
+  function renderSynthetic() {
+    let s = 1337;
+    const rng = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+    const cells = [];
+    let total = 0, streak = 0, bestStreak = 0;
+    for (let w = 0; w < WEEKS; w++) {
+      for (let d = 0; d < DAYS; d++) {
+        const recency = w / WEEKS;
+        const weekend = (d === 5 || d === 6) ? 0.55 : 1.0;
+        let p = 0.18 + recency * 0.55;
+        if ((w > 30 && w < 36) || (w > 42 && w < 49)) p += 0.25;
+        p *= weekend;
+        let level = 0;
+        const r = rng();
+        if (r < p)        level = 1;
+        if (r < p * 0.7)  level = 2;
+        if (r < p * 0.4)  level = 3;
+        if (r < p * 0.15) level = 4;
+        cells.push(level);
+        if (level > 0) { total += level; streak++; if (streak > bestStreak) bestStreak = streak; }
+        else streak = 0;
+      }
+    }
+    grid.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < cells.length; i++) {
+      const c = document.createElement('span');
+      c.className = 'gh-cell';
+      c.dataset.l = String(cells[i]);
+      frag.appendChild(c);
+    }
+    grid.appendChild(frag);
+    months.innerHTML = ['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr']
+      .map(m => `<span>${m}</span>`).join('');
+    return { total: 180 + Math.floor(rng() * 60), bestStreak };
+  }
+
+  async function load() {
+    try {
+      const res = await fetch(`https://github-contributions-api.jogruber.de/v4/${USER}?y=last`, {
+        headers: { 'Accept': 'application/json' },
+      });
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      if (!data || !Array.isArray(data.contributions) || !data.contributions.length) {
+        throw new Error('empty payload');
+      }
+      const { total, bestStreak } = renderFromContributions(data.contributions);
+      const apiTotal = (data.total && (data.total.lastYear ?? data.total[Object.keys(data.total)[0]])) || total;
+      totalEl.textContent = apiTotal.toLocaleString();
+      streakEl.textContent = bestStreak + ' days';
+    } catch (err) {
+      console.warn('[gh heatmap] real data unavailable, falling back to synthetic:', err);
+      const { total, bestStreak } = renderSynthetic();
+      totalEl.textContent = total.toLocaleString();
+      streakEl.textContent = bestStreak + ' days';
+    }
+  }
+
+  load();
+})();
+</script>
+
+</body>
+</html>
