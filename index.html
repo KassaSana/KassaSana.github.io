@@ -322,7 +322,7 @@ main {
 }
 .proj-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
 }
 .proj-grid .proj { margin-bottom: 0; padding: 20px 22px; }
@@ -673,6 +673,63 @@ main {
 }
 .contact-card:hover .contact-arr { color: var(--accent); transform: translateX(2px); }
 
+/* ─── contact CTA (bottom) ────────────────────── */
+.cta-card {
+  border: 1px solid var(--accent-dim);
+  border-radius: 8px;
+  padding: 36px 32px 30px;
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--accent) 6%, var(--bg-2)) 0%,
+    var(--bg-2) 100%);
+  text-align: center;
+}
+.cta-line {
+  color: var(--fg-2);
+  font-size: 13px;
+  margin-bottom: 22px;
+  letter-spacing: 0.2px;
+}
+.cta-caret { color: var(--accent-2); margin-right: 4px; }
+.cta-email {
+  display: inline-block;
+  color: var(--accent);
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 120ms, color 120ms;
+}
+.cta-email:hover { border-bottom-color: var(--accent); }
+.cta-email .arr {
+  color: var(--accent-2);
+  margin-left: 4px;
+  display: inline-block;
+  transition: transform 160ms;
+}
+.cta-email:hover .arr { transform: translateX(3px); }
+.cta-links {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  font-size: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.cta-links a {
+  color: var(--fg-3);
+  border-bottom: none;
+  transition: color 120ms;
+}
+.cta-links a:hover { color: var(--fg); border-bottom: none; }
+.cta-links a .arr { color: var(--fg-4); margin-left: 3px; }
+.cta-links .sep { color: var(--fg-4); }
+@media (max-width: 640px) {
+  .cta-card { padding: 26px 20px 22px; }
+  .cta-email { font-size: 17px; }
+  .cta-links { gap: 10px; font-size: 11.5px; }
+}
+
 /* ─── blog ────────────────────────────────────── */
 .post {
   display: grid;
@@ -944,6 +1001,22 @@ main {
       </div>
     </article>
 
+    <article class="proj proj-active" style="margin-top: 14px;">
+      <div class="proj-status">shipped · live</div>
+      <div class="proj-head">
+        <div class="proj-name">cross-exchange arbitrage detector</div>
+        <div class="proj-when">2026</div>
+      </div>
+      <div class="proj-perf"><span class="k">signature:</span> <span class="v">real-time L2 books across 3 venues · </span><span class="accent">p99 27µs detection</span></div>
+      <p class="proj-tag">real-time arbitrage detection across gemini, coinbase, and binance — ingest public order books, maintain in-memory L2, surface cross-venue opportunities.</p>
+      <p class="proj-body">python asyncio pipeline maintains live L2 books across three exchanges, detects theoretical arbitrage above a configurable threshold, persists to sqlite, and streams state to a react dashboard. <strong>p99 detection latency 27µs at 1.9M events/min</strong>; adapter-driven gap resync via rest snapshots, prometheus metrics, and 94% backend coverage. theoretical p&amp;l only — fees and slippage explicitly excluded.</p>
+      <div class="proj-stack">python · asyncio · fastapi · sqlite · react/ts · prometheus</div>
+      <div class="proj-links">
+        <a href="https://cross-exch-proj.vercel.app">live demo<span class="arr">↗</span></a>
+        <a href="https://github.com/KassaSana/CROSS_EXCH_Proj">github<span class="arr">↗</span></a>
+      </div>
+    </article>
+
     <div class="proj-grid">
       <article class="proj">
         <div class="proj-head">
@@ -970,6 +1043,21 @@ main {
         <div class="proj-stack">c++ · python · discrete-event sim</div>
         <div class="proj-links">
           <a href="https://github.com/KassaSana/CivicQ">github<span class="arr">↗</span></a>
+        </div>
+      </article>
+
+      <article class="proj">
+        <div class="proj-head">
+          <div class="proj-name">qprep</div>
+          <div class="proj-when">2026</div>
+        </div>
+        <div class="proj-perf"><span class="k">signature:</span> <span class="v">3-level nudge engine · </span><span class="accent">cached for cost</span></div>
+        <p class="proj-tag">agent-first quant interview prep — the tool i'm using to prep, shipped to learn the full loop.</p>
+        <p class="proj-body">unified topic-tagged question bank with katex math, six answer kinds, and a 3-level claude-powered nudge engine that points at your reasoning gap without revealing the answer. multi-provider grader (groq/anthropic/keyword) and per-cookie rate limits keep api costs bounded.</p>
+        <div class="proj-stack">next.js · supabase · anthropic · piston · katex</div>
+        <div class="proj-links">
+          <a href="https://qprep-chi.vercel.app">live demo<span class="arr">↗</span></a>
+          <a href="https://github.com/KassaSana/Qprep">github<span class="arr">↗</span></a>
         </div>
       </article>
     </div>
@@ -1024,35 +1112,6 @@ main {
     </div>
   </section>
 
-  <!-- ─── CONTACT ─────────────────────────────── -->
-  <section class="section reveal" data-screen-label="09 contact">
-    <div class="prompt-line"><span class="p">$</span> <span class="cmd">cat contact.txt</span></div>
-    <div class="section-head"><h2>get in touch</h2><span class="rule"></span></div>
-    <p class="intro">reach out about internships, full-time roles, or anything you found interesting on this page. the fastest way is email.</p>
-    <div class="contact-grid">
-      <a class="contact-card primary" href="mailto:k.sanayew@ufl.edu">
-        <div class="contact-k">email</div>
-        <div class="contact-v">k.sanayew@ufl.edu</div>
-        <div class="contact-arr">→</div>
-      </a>
-      <a class="contact-card" href="https://linkedin.com/in/kassahun-sanayew">
-        <div class="contact-k">linkedin</div>
-        <div class="contact-v">/in/kassahun-sanayew</div>
-        <div class="contact-arr">↗</div>
-      </a>
-      <a class="contact-card" href="https://github.com/KassaSana">
-        <div class="contact-k">github</div>
-        <div class="contact-v">@KassaSana</div>
-        <div class="contact-arr">↗</div>
-      </a>
-      <a class="contact-card" href="resume.pdf">
-        <div class="contact-k">resume</div>
-        <div class="contact-v">resume.pdf</div>
-        <div class="contact-arr">↓</div>
-      </a>
-    </div>
-  </section>
-
   <!-- ─── STACK ───────────────────────────────── -->
   <section class="section reveal" data-screen-label="10 stack">
     <div class="prompt-line"><span class="p">$</span> <span class="cmd">cat stack.toml</span></div>
@@ -1062,6 +1121,22 @@ main {
     <div class="skl"><span class="skl-k">infra</span><span class="skl-v">aws (dynamodb, ec2, appconfig) · docker · terraform · linux · git</span></div>
     <div class="skl"><span class="skl-k">data &amp; ml</span><span class="skl-v">postgres · numpy · openai api</span></div>
     <div class="skl"><span class="skl-k">testing</span><span class="skl-v">junit · mockito · pytest · jest · postman</span></div>
+  </section>
+
+  <!-- ─── CONTACT (bottom CTA) ────────────────── -->
+  <section class="section reveal" data-screen-label="09 contact" style="margin-bottom: 32px;">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">contact --open</span></div>
+    <div class="cta-card">
+      <p class="cta-line"><span class="cta-caret">›</span> got a problem worth solving?</p>
+      <a class="cta-email" href="mailto:k.sanayew@ufl.edu">k.sanayew@ufl.edu <span class="arr">→</span></a>
+      <div class="cta-links">
+        <a href="https://linkedin.com/in/kassahun-sanayew">linkedin <span class="arr">↗</span></a>
+        <span class="sep">·</span>
+        <a href="https://github.com/KassaSana">github <span class="arr">↗</span></a>
+        <span class="sep">·</span>
+        <a href="resume.pdf">resume <span class="arr">↓</span></a>
+      </div>
+    </div>
   </section>
 
   <footer class="foot">
