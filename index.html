@@ -558,21 +558,19 @@ main {
 
 /* ─── project-based learning ──────────────── */
 .learn-card {
-  border: 1px solid var(--line);
+  border: 1px dashed var(--line-soft);
   border-radius: 6px;
-  background: var(--bg-2);
-  padding: 20px 22px;
-  margin-bottom: 14px;
+  background: var(--bg);
+  padding: 14px 16px;
+  margin-bottom: 10px;
   transition: border-color 160ms, background 160ms;
   display: flex;
   flex-direction: column;
 }
-.learn-card:hover { border-color: var(--accent-dim); background: var(--surface); }
+.learn-card:hover { border-color: var(--accent-dim); background: var(--bg-2); }
 .learn-active {
   border-color: var(--accent-dim);
-  background: linear-gradient(180deg,
-    color-mix(in oklab, var(--accent) 5%, var(--bg-2)) 0%,
-    var(--bg-2) 100%);
+  background: var(--bg);
 }
 .learn-status {
   display: inline-block;
@@ -580,12 +578,12 @@ main {
   font-size: 9.5px;
   letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: var(--accent);
-  border: 1px solid var(--accent-dim);
+  color: var(--fg-4);
+  border: 1px dashed var(--line);
   padding: 2px 8px;
   border-radius: 3px;
-  margin-bottom: 12px;
-  background: color-mix(in oklab, var(--accent) 8%, transparent);
+  margin-bottom: 10px;
+  background: transparent;
 }
 .learn-head {
   display: flex;
@@ -793,7 +791,7 @@ main {
   <section class="hero reveal" data-screen-label="01 hero">
     <div class="prompt-line"><span class="p">$</span> <span class="cmd">whoami</span></div>
     <h1><span class="sigil">›</span>Kassahun Sanayew</h1>
-    <p class="tag">b.s. computer science, <span class="em">university of florida</span> (aug 2025) · m.s. computer engineering, uf (may 2027) · prev swe intern <span class="em">@amazon</span> · interested in low-latency systems, statistical learning, quant, and full-stack.</p>
+    <p class="tag">b.s. computer science, <span class="em">university of florida</span> (aug 2025) · m.s. computer engineering, uf (may 2027) · prev swe intern <span class="em">@amazon</span> · interested in low-latency systems, statistical learning, and quant.</p>
 
     <div class="status"><span class="status-dot"></span>incoming swe intern @cvs · summer 2026</div>
 
@@ -861,7 +859,7 @@ main {
         <div class="exp-co">cvs health <span style="color:var(--accent-2);font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:500;margin-left:8px;border:1px solid var(--accent-dim);padding:1px 7px;border-radius:3px;">incoming</span></div>
         <div class="exp-role">swe intern · summer 2026</div>
         <ul>
-          <li>joining the cvs engineering team this summer — details to come.</li>
+          <li>joining the cvs engineering team · summer 2026.</li>
         </ul>
       </div>
     </div>
@@ -871,10 +869,7 @@ main {
         <div class="exp-co">amazon</div>
         <div class="exp-role">swe intern · promotions platform · seattle, wa</div>
         <ul>
-          <li>designed an <strong>event value creation api</strong> in java/spring boot that automated promotion value calculations across the platform — reduced time-to-result from <strong>10–20 minutes to under 5 seconds</strong>.</li>
-          <li>engineered a graph-traversal algorithm parsing nested promotional rule trees from dynamodb, evaluating multi-level eligibility constraints across variable-depth dependency chains.</li>
-          <li>integrated with aws appconfig for dynamic rule updates without service restarts — real-time configuration changes across distributed promotion infra.</li>
-          <li>prototyped a test-case generation api that auto-produces regression suites from production promotion configs, eliminating hand-written qa scaffolding.</li>
+          <li>worked on api development for the promotions team.</li>
         </ul>
       </div>
     </div>
@@ -980,50 +975,11 @@ main {
     </div>
   </section>
 
-  <!-- ─── BLOG ────────────────────────────────── -->
-  <section class="section reveal" data-screen-label="07 blog">
-    <div class="prompt-line"><span class="p">$</span> <span class="cmd">ls -la blog/</span></div>
-    <div class="section-head"><h2>writing</h2><span class="rule"></span></div>
-    <p class="intro">notes from things i'm building or learning. mostly for me — but if it's useful to you, even better.</p>
-    <div class="post">
-      <span class="post-when">in progress</span>
-      <span>
-        <span class="post-title"><a href="#">why i rebuilt the same focus app three times<span class="post-soon">draft</span></a></span>
-        <div class="post-desc">on noticing that ui was never the bottleneck — and what moving the enforcement layer one level deeper each time actually taught me.</div>
-      </span>
-      <span class="post-meta">~8 min</span>
-    </div>
-    <div class="post">
-      <span class="post-when">in progress</span>
-      <span>
-        <span class="post-title"><a href="#">a lock-free spsc ring buffer, annotated<span class="post-soon">draft</span></a></span>
-        <div class="post-desc">walking through the c++ memory model — acquire/release semantics, why cache-line padding matters, and how false sharing destroyed my first benchmark.</div>
-      </span>
-      <span class="post-meta">~12 min</span>
-    </div>
-    <div class="post">
-      <span class="post-when">planned</span>
-      <span>
-        <span class="post-title"><a href="#">rag is mostly retrieval — the model is the easy part</a></span>
-        <div class="post-desc">what i learned tuning chunk size, overlap, and top-k on notemind, and why grounded prompts beat clever prompts.</div>
-      </span>
-      <span class="post-meta">~6 min</span>
-    </div>
-    <div class="post">
-      <span class="post-when">planned</span>
-      <span>
-        <span class="post-title"><a href="#">amazon promotions: graph traversal in production</a></span>
-        <div class="post-desc">notes on the rule-tree problem, why a flat evaluator wasn't enough, and how dependency depth shaped the api.</div>
-      </span>
-      <span class="post-meta">~7 min</span>
-    </div>
-  </section>
-
-  <!-- ─── PROJECT-BASED LEARNING ──────────────── -->
-  <section class="section reveal" data-screen-label="08 learning">
-    <div class="prompt-line"><span class="p">$</span> <span class="cmd">ls -la learning/</span></div>
-    <div class="section-head"><h2>project-based learning</h2><span class="rule"></span></div>
-    <p class="intro">building things from scratch to understand the layer below the framework — a kv store to feel write-amplification, a web server in c to stop hand-waving about sockets, data structures by hand to internalize their tradeoffs.</p>
+  <!-- ─── SYSTEMS FUNDAMENTALS ──────────────── -->
+  <section class="section reveal" data-screen-label="08 fundamentals">
+    <div class="prompt-line"><span class="p">$</span> <span class="cmd">ls -la fundamentals/</span></div>
+    <div class="section-head"><h2>systems fundamentals</h2><span class="rule"></span></div>
+    <p class="intro">built from scratch to understand the layer below the framework — a kv store to feel write-amplification, a web server in c to stop hand-waving about sockets, probability engines to internalize statistical tradeoffs.</p>
 
     <article class="learn-card learn-active">
       <div class="learn-status">currently building</div>
@@ -1104,7 +1060,7 @@ main {
     <div class="skl"><span class="skl-k">languages</span><span class="skl-v">c++17 · java · python · typescript · go · sql</span></div>
     <div class="skl"><span class="skl-k">frameworks</span><span class="skl-v">spring boot · react · zeromq · flask · fastapi · node/express</span></div>
     <div class="skl"><span class="skl-k">infra</span><span class="skl-v">aws (dynamodb, ec2, appconfig) · docker · terraform · linux · git</span></div>
-    <div class="skl"><span class="skl-k">data &amp; ml</span><span class="skl-v">postgres · pgvector · huggingface · numpy · openai api</span></div>
+    <div class="skl"><span class="skl-k">data &amp; ml</span><span class="skl-v">postgres · numpy · openai api</span></div>
     <div class="skl"><span class="skl-k">testing</span><span class="skl-v">junit · mockito · pytest · jest · postman</span></div>
   </section>
 
@@ -1123,7 +1079,7 @@ main {
     "greyTemp": 220,
     "density": "regular",
     "showStatus": true,
-    "statusText": "open to internships & new grad — swe \/ quant \/ data science",
+    "statusText": "open to internships & new grad — swe \/ quant dev",
     "showGitlog": true,
     "showStats": true
   }/*EDITMODE-END*/;
