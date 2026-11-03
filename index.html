@@ -1,1 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kassahun Sanayew</title>
+<meta name="description" content="Kassahun Sanayew: M.S. Computer Engineering student at UF. Storage engines, real-time data systems, and merged contributions to DuckDB, Apache DataFusion, and NVIDIA CCCL.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kassahun Sanayew, Software Engineer">
+<meta property="og:description" content="M.S. Computer Engineering student at UF. Storage engines, real-time data systems, and merged contributions to DuckDB, Apache DataFusion, and NVIDIA CCCL.">
+<meta property="og:url" content="https://kassasana.github.io/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23252b30'/%3E%3Ctext x='50%25' y='58%25' font-family='JetBrains Mono,monospace' font-size='62' font-weight='700' text-anchor='middle' dominant-baseline='middle' fill='%2386c5a8'%3E%26gt;_%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #5c5c5c;
+    --line: #e4e4e4;
+    --link: #0b5cad;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  main { max-width: 42rem; margin: 0 auto; padding: 2.5rem 1rem 3rem; }
+  a { color: var(--link); text-underline-offset: 2px; }
+  h1 { font-size: 1.75rem; line-height: 1.2; margin: 0 0 .35rem; }
+  .summary { margin: 0 0 .75rem; color: var(--muted); }
+  .links { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+  h2 {
+    font-size: .8rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin: 2.25rem 0 .75rem; padding-bottom: .35rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .item { margin: 0 0 1.1rem; }
+  .item h3 { font-size: 1rem; margin: 0; }
+  .meta { color: var(--muted); font-size: .9rem; }
+  .item p { margin: .15rem 0 0; }
+  ul.plain { margin: 0; padding-left: 1.1rem; }
+  ul.plain li { margin: 0 0 .4rem; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .88em; overflow-wrap: anywhere; }
+  .edu p { margin: 0 0 .2rem; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Kassahun Sanayew</h1>
+    <p class="summary">M.S. Computer Engineering student at UF. I build storage engines and real-time data systems, and I contribute to database and CUDA libraries.</p>
+    <ul class="links">
+      <li><a href="https://github.com/KassaSana">GitHub</a></li>
+      <li><a href="https://linkedin.com/in/kassahun-sanayew">LinkedIn</a></li>
+      <li><a href="mailto:k.sanayew@ufl.edu">k.sanayew@ufl.edu</a></li>
+      <li><a href="resume.pdf">Resume (PDF)</a></li>
+    </ul>
+  </header>
 
+  <section>
+    <h2>Experience</h2>
+    <div class="item">
+      <h3>CVS Health</h3>
+      <div class="meta">Software Engineering Co-op and Intern · 2026</div>
+      <!-- TODO(kassa): confirm dates; add a second line with one concrete result -->
+      <p>Built backend services for a retrieval-augmented generation (RAG) chatbot.</p>
+    </div>
+    <div class="item">
+      <h3>Amazon</h3>
+      <div class="meta">Software Development Engineer Intern, Promotions Platform · Seattle, WA · May–Aug 2024</div>
+      <!-- TODO(kassa): add a second line with one concrete result -->
+      <p>Built API endpoints for the promotions platform.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Open source (merged)</h2>
+    <ul class="plain">
+      <li><a href="https://github.com/NVIDIA/cccl/pull/12253">NVIDIA/cccl #12253</a>: enable <code>__float128</code> in <code>cuda::std::ceil</code>, <code>floor</code>, <code>trunc</code>, <code>round</code></li>
+      <li><a href="https://github.com/NVIDIA/cccl/pull/12307">NVIDIA/cccl #12307</a>: unpin breathe now that 5.1.0 fixes template specialization names</li>
+      <li><a href="https://github.com/duckdb/duckdb/pull/27852">duckdb/duckdb #27852</a>: DISTINCT aggregates share a branch only with a matching ORDER BY</li>
+      <li><a href="https://github.com/apache/datafusion/pull/25807">apache/datafusion #25807</a>: CLI respects <code>sql_parser.recursion_limit</code></li>
+      <li><a href="https://github.com/apache/datafusion/pull/25788">apache/datafusion #25788</a>: validate <code>execution.time_zone</code> at <code>SET</code> time</li>
+      <li><a href="https://github.com/swar/nba_api/pull/695">swar/nba_api #695</a>: add the Celtics 2024 championship to static data</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+    <div class="item">
+      <h3><a href="https://github.com/KassaSana/durablekv">durablekv</a></h3>
+      <div class="meta">C++20</div>
+      <p>A crash-safe LSM-tree key-value store with a write-ahead log, SSTables, leveled compaction, and Bloom filters, checked by kill -9 recovery tests.</p>
+      <!-- TODO(kassa): hardest-decision sentence -->
+    </div>
+    <div class="item">
+      <h3><a href="https://github.com/KassaSana/ArbSync">ArbSync</a></h3>
+      <div class="meta">Python (asyncio) · SQLite · React/TypeScript</div>
+      <p>Keeps live L2 order books for Gemini, Coinbase, and Binance in memory, detects cross-exchange arbitrage above a threshold, and streams it to a React dashboard.</p>
+      <!-- TODO(kassa): hardest-decision sentence -->
+    </div>
+    <div class="item">
+      <h3><a href="https://github.com/KassaSana/Snapback">Snapback</a></h3>
+      <div class="meta">C++</div>
+      <p>A desktop focus tracker that turns active-window activity into focus signals and brings back the task you were on after a distraction.</p>
+      <!-- TODO(kassa): hardest-decision sentence -->
+    </div>
+  </section>
+
+  <section class="edu">
+    <h2>Education</h2>
+    <p><strong>M.S. Computer Engineering</strong>, University of Florida · expected May 2027</p>
+    <p><strong>B.S. Computer Science</strong>, University of Florida · 2025</p>
+  </section>
+</main>
+</body>
+</html>
